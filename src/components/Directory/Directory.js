@@ -7,7 +7,7 @@ import './directory.scss'
 const Directory = () => {
 
 
-  const [sections, setSection] = useState(SectionData)
+  const [ sections ] = useState(SectionData)
 
   return (
     <div className="directory-menu">    
