@@ -9,6 +9,7 @@ import { auth } from '../../firebase/firebase.utils'
 
 const Header = ({ currentUser }) => (
   <div className='header'>
+    {console.log(currentUser)}
     <Link to='/'>
       <Logo className='logo' />
     </Link>
@@ -20,10 +21,8 @@ const Header = ({ currentUser }) => (
         CONTACT
       </Link>
       {
-        currentUser ? 
-        <div className='option' onClick={() => auth.signOut()}>SIGN OUT</div>
-        :
-        <Link to='/signin'>SIGN IN</Link>
+        currentUser ? <div className='option' onClick={() => auth.signOut()}>SIGN OUT</div>
+        : <Link to='/signin'>SIGN IN</Link>
       }
     </div>
   </div>

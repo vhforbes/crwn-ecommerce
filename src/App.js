@@ -8,28 +8,33 @@ import SignInAndUpPage from './pages/SignInAndUp/SignInAndUp'
 
 import Header from './components/Header/Header'
 
-import { auth } from './firebase/firebase.utils'
+import { auth, createUserProfileDocument } from './firebase/firebase.utils'
 
 function App() {
 
-  const [ currentUser, setCurrentUser ] = useState(null)
-
-  
+  const [ currentUser, setCurrentUser ] = useState()
 
   useEffect(() => {
+    const unsubscribeFromAuth = () => auth.onAuthStateChanged(async userAuth => { 
 
-    let unsubscribeFromAuth = null
-
-    unsubscribeFromAuth = auth.onAuthStateChanged(user => {
-      setCurrentUser(user)
+      if (userAuth) {
+        const userRef = await createUserProfileDocument(userAuth)
+        userRef.onSnapshot(snapshot => {
+        setCurrentUser({
+          id: snapshot.id,
+          ...snapshot.data()
+        })
+        })
+      } else {
+        setCurrentUser(userAuth) // Will set to null when not logged in
+      }
     })
-
     unsubscribeFromAuth()
   }, [])
 
   return (
     <div>
-      <Header currentUser={currentUser}/>
+      <Header currentUser={currentUser} />
       <Switch>
         <Route exact path='/' component={HomePage} />
         <Route exact path='/shop' component={ShopPage} />
